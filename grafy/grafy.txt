@@ -1,0 +1,1 @@
+Ten folder przechowuje pliki o rozszerzeniu dot i obrazy png tworzone podczas dzia³ania programu.
