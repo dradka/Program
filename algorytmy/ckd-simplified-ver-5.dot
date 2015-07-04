@@ -1,0 +1,63 @@
+// CKD - chronic kidney disease
+// simplfied for the AIME paper
+// version 6 -- customised for the pseudo-code representation
+
+digraph CKD {
+	ranksep=0.1;
+node [shape=box, style=filled, fillcolor=green, fontname=Calibri, fontsize=11];
+edge [fontname="Calibri Italic", fontsize=10];
+
+// Context
+c_ckd [label="Patient diagnosed \n with CKD", shape=oval, style=filled, fillcolor=red];
+
+// Actions
+a_phosphate_binders [label="Phosphate binders:\n calcium carbonate"];
+a_cv_risk_management [label="CV risk management"];
+a_epo_agents [label="Erythropoiesis-stimulanting agents:\n darbepoetin alfa"];
+a_iron_therapy [label="Oral iron therapy: \n  ferrous salt"];
+a_antiplatelets [label="Antiplatelets: aspirin"];
+a_ace_inhibitors [label="ACE inhibitor"];
+a_lifestyle_management [label="Lifestyle management"];
+
+
+// Decisions
+d_gfr [shape=diamond, fillcolor=yellow, label="GFR level?"];
+d_anemia_present [shape=diamond, fillcolor=yellow, label="Anemia present?"];
+d_metabolism_anomalies_present [shape=diamond, fillcolor=yellow, label="Mineral metabolism \n abnormalities?"];
+d_iron_level [shape=diamond, fillcolor=yellow, label="Ferritin level?"];
+
+// Parallel gateways
+p1 [shape=circle, label="", width=0.2, fillcolor=black];
+p2 [shape=circle, label="", width=0.2, fillcolor=black];
+p3 [shape=circle, label="", width=0.2, fillcolor=black];
+
+// Event nodes
+e_start [shape=circle, label="", width=0.3, penwidth=2, fillcolor="gray"];
+e_end [shape=circle, label="", width=0.3, penwidth=6, fillcolor="gray"];
+
+
+// Arcs
+e_start -> c_ckd;
+c_ckd -> d_gfr;
+d_gfr -> p1 [label="< 40"];
+d_gfr -> p2 [label=">= 40"];
+p1 -> d_anemia_present;
+p1 -> d_metabolism_anomalies_present;
+d_anemia_present -> d_iron_level [label="yes"];
+d_anemia_present -> p2 [label = "no"];
+d_iron_level -> a_iron_therapy [label="< 100"];
+d_iron_level -> a_epo_agents [label=">= 100"];
+a_iron_therapy -> a_epo_agents;
+a_epo_agents -> p2;
+d_metabolism_anomalies_present -> a_phosphate_binders [label="present"];
+a_phosphate_binders -> p2;
+d_metabolism_anomalies_present -> p2 [label="absent"];
+
+p2 -> a_cv_risk_management;
+p2 -> a_antiplatelets;
+a_antiplatelets -> a_ace_inhibitors;
+a_cv_risk_management -> p3;
+a_ace_inhibitors -> p3;
+p3 -> a_lifestyle_management;
+a_lifestyle_management -> e_end;
+}

@@ -1,0 +1,7 @@
+ppi:PPI
+a_inh_cortico2:Inhaled corticosteroids
+a_oral_cortico2:Oral corticosteroids
+warfarin:Warfarin
+BB:BB
+warfarin2:Maintenance therapy: Warfarin
+aspirin:Long-term therapy: Aspirin

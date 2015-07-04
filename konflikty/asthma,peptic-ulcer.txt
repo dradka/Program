@@ -1,0 +1,3 @@
+c_pe a_oral_cortico:replace a_oral_cortico with a_inh_cortico2
+c_pe a_nsaid:add ppi after a_nsaid
+a_et a_inh_cortico:replace a_inh_cortico with a_oral_cortico2

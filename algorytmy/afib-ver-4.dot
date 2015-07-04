@@ -1,0 +1,53 @@
+// AF - atrial fibliration 
+// the initial version was proposed for the AIME 2013 paper
+// this is a new version developed by Wojtek
+// version 4 --  customized for representation in pseudo-code and consistent with what was presented in the AIME paper
+
+digraph AFIB {
+	ranksep=0.1;
+node [shape=box, style=filled, fillcolor=green, fontname=Calibri, fontsize=11];
+edge [fontname="Calibri Italic", fontsize=10];
+
+// Context
+c_afib [label="Patient diagnosed \n with AFib", shape=oval, style=filled, fillcolor=red];
+
+// Actions
+a_cha2ds2 [label="Perform CHA2DS2-VASc test"];
+a_oa_w [label="Oral anticoagulation: \n warfarin"];
+a_rct_bb [label="Rate control therapy: \n BB"];
+a_mt_asa [label="Maitenance therapy: \n asprin"]
+
+a_stt_bb [label="Short-term therapy: \n BB"];
+a_rct_a [label="Rhythm control therapy: \n amiodarone"];
+a_ltoa_w [label="Long-term oral anticoagulation: \n warfarin"]
+
+a_ccb [label="CCB"];
+a_acei [label="ACE inhibitor"];
+
+// Decisions
+d_paroxys_afib [shape=diamond, fillcolor=yellow, label="AFib type?"];
+
+// Parallel gateways
+p1 [shape=circle, label="", width=0.2, fillcolor=black];
+p2 [shape=circle, label="", width=0.2, fillcolor=black];
+
+// Event nodes
+e_start [shape=circle, label="", width=0.3, penwidth=2, fillcolor="gray"];
+e_end [shape=circle, label="", width=0.3, penwidth=6, fillcolor="gray"];
+
+// Arcs
+e_start -> c_afib -> a_cha2ds2 ->  d_paroxys_afib;
+d_paroxys_afib -> a_oa_w [label="symptomatic"];
+d_paroxys_afib -> a_stt_bb [label="paroxysmal"];
+a_oa_w -> a_rct_bb;
+a_rct_bb -> a_mt_asa;
+a_mt_asa -> p1;
+a_stt_bb -> a_rct_a;
+a_rct_a -> a_ltoa_w;
+a_ltoa_w -> p1;
+p1 -> a_ccb;
+p1 -> a_acei;
+a_ccb -> p2;
+a_acei -> p2;
+p2 -> e_end;
+}

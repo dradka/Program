@@ -1,0 +1,69 @@
+// SCAD - stable coronary artery disease
+
+digraph SCAD {
+	ranksep=0.1;
+node [shape=box, style=filled, fillcolor=green, fontname=Calibri, fontsize=11];
+edge [fontname="Calibri Italic", fontsize=10];
+
+// Context
+c_scad [label="Patient diagnosed \n with SCAD [SCAD]", shape=oval, style=filled, fillcolor=red];
+
+event_risk [shape=diamond, fillcolor=yellow, label="Event risk?"];
+parallel_1 [shape=circle, label="", width=0.2, fillcolor=black];
+parallel_2 [shape=circle, label="", width=0.2, fillcolor=black];
+parallel_3 [shape=circle, label="", width=0.2, fillcolor=black];
+parallel_4 [shape=circle, label="", width=0.2, fillcolor=black];
+line_1_1 [label="1st line: \n Short-acting nitrates + \n [beta-blockers (BB) or calcium channel blockers (CCB)]"];
+line_2_1 [label="2nd line: \n Long-lasting nitrates + \n [ivabradine or nicorandil or ranolazine or trimetazidine]"];
+line_1_2 [label="1st line (continued)..."];
+line_2_2 [label="2nd line (continued)..."];
+symptoms_improved_1 [shape=diamond, fillcolor=yellow, label="Symptoms improved?"];
+symptoms_improved_2 [shape=diamond, fillcolor=yellow, label="Symptoms improved?"];
+
+event_prevention_1 [label="Event prevention 1: \n Lifestyle management; \n Control of risk factors"];
+event_prevention_2 [label="Event prevention 2: \n Aspirin + statins"];
+
+stenosis [shape=diamond, fillcolor=yellow, label="Stenosis?"];
+pharmacotherapy [shape=diamond, fillcolor=yellow, label="Pharamcotherapy\n preferred?"];
+
+ica_ffr [label="Diagnostic invasive coronary angiography (ICA); \n Fractional flow reserve (FFR)"];
+revascularization [label="Revascularization"];
+nitrates [label="Short-acting nitrates"];
+renal_complications [shape=diamond, fillcolor=yellow, label="Renal\n complications?"];
+acei [label="ACE inhibitor (ACEI)"];
+
+// Event nodes
+e_start [shape=circle, label="", width=0.3, penwidth=2, fillcolor="gray"];
+e_end [shape=circle, label="", width=0.3, penwidth=6, fillcolor="gray"];
+
+e_start -> c_scad -> event_risk;
+event_risk -> parallel_1 [label = low];
+parallel_1 -> line_1_1;
+parallel_1 -> event_prevention_1;
+line_1_1 -> parallel_2;
+event_prevention_1 -> parallel_2;
+parallel_2 -> symptoms_improved_1;
+symptoms_improved_1 -> line_1_2 [label=yes];
+symptoms_improved_1 -> parallel_3 [label=no];
+parallel_3 -> line_2_1;
+parallel_3 -> event_prevention_2;
+line_2_1 -> parallel_4;
+event_prevention_2 -> parallel_4;
+parallel_4 -> symptoms_improved_2;
+symptoms_improved_2 -> line_2_2 [label=yes];
+
+event_risk -> stenosis [label=intermediate];
+stenosis -> pharmacotherapy [label=no];
+pharmacotherapy -> parallel_1 [label=yes];
+
+event_risk -> ica_ffr [label=high];
+ica_ffr -> revascularization;
+stenosis -> revascularization [label=yes];
+pharmacotherapy  -> revascularization [label=no];
+symptoms_improved_2 -> revascularization [label=no];
+revascularization -> nitrates;
+nitrates -> renal_complications;
+renal_complications -> line_2_2 [label=no];
+renal_complications -> acei [label=yes];
+acei -> line_2_2 -> e_end;
+}

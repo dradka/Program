@@ -1,0 +1,38 @@
+digraph PE {
+	ranksep=0.1;
+	node [shape=box, style=filled, fillcolor=green, fontname=Calibri, fontsize=11];
+	edge [fontname="Calibri Italic", fontsize=10];
+
+	// Context
+	c_pe [label="Patient diagnosed \n with peptic ulcer [PE]", shape=oval, style=filled, fillcolor=red];
+	
+	// Event nodes
+	e_start [shape=circle, label="", width=0.3, penwidth=2, fillcolor="gray"];
+	e_end [shape=circle, label="", width=0.3, penwidth=6, fillcolor="gray"];
+	
+	// Decision nodes
+	d_symptoms [shape=diamond, fillcolor=yellow, label="Complicated ulcer symptoms?"];
+	//d_current_nsaid [shape=diamond, fillcolor=yellow, label="Currently using NSAID?"];
+	d_prev_et [shape=diamond, fillcolor=yellow, label="Previous eradication \n therapy?"];
+	d_resolved [shape=diamond, fillcolor=yellow, label="Symptoms resolved?"];
+
+	// Action nodes
+	// a_stop_nsaid [label="Stop NSAID"];
+	a_et [label="Eradication therapy"];
+	a_endo [label="Endoscopy"];
+	a_consult [label="Specialist consultation"];
+	
+	// Arcs
+	e_start -> c_pe -> d_symptoms;
+	d_symptoms -> a_endo [label="yes"];
+	a_endo -> a_consult -> e_end;
+	d_symptoms -> d_prev_et [label="no"];
+//	d_current_nsaid -> a_stop_nsaid [label="yes"];
+//	a_stop_nsaid -> e_end;
+//	d_current_nsaid -> d_prev_et [label="no"];
+	d_prev_et -> a_endo [label="yes"];
+	d_prev_et -> a_et [label="no"];
+	a_et -> d_resolved;
+	d_resolved -> e_end [label="yes"];
+	d_resolved -> a_endo [label="no"];
+}

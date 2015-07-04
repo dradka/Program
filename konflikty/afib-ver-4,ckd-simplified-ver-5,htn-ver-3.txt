@@ -1,0 +1,5 @@
+c_htn c_ckd:remove a_step1_acei,remove a_step1_ccb
+c_afib c_ckd c_htn:remove a_step3_diuretric
+c_afib c_ckd:replace a_antiplatelets with warfarin,replace a_rct_a with BB
+c_afib c_ckd &CHA2DS2-VASc>2:replace a_mt_asa with warfarin2
+c_afib c_ckd &CHA2DS2-VASc<=1:replace a_oa_w with aspirin,replace a_ltoa_w with aspirin

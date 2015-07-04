@@ -1,0 +1,41 @@
+digraph AE {
+	ranksep=0.1;
+	node [shape=box, style=filled, fillcolor=green, fontname=Calibri, fontsize=11];
+	edge [fontname="Calibri Italic", fontsize=10];
+
+	// Context
+	c_ae [label="Patient diagnosed \n with asthma exacerbation [AE]", shape=oval, style=filled, fillcolor=red];
+	
+	// Event nodes
+	e_start [shape=circle, label="", width=0.3, penwidth=2, fillcolor="gray"];
+	e_end [shape=circle, label="", width=0.3, penwidth=6, fillcolor="gray"];
+	
+	// Action nodes
+	a_beta_agonists [label="Beta-agonists"];
+	a_nsaid [label="NSAID"];
+	a_inh_cortico [label="Inhaled corticosteroids"];
+	a_oral_cortico [label="Oral corticosteroids"];
+	a_anti [label="Anticholinergics"];
+	a_vent_support [label="Ventilatory support"];
+	// Decisions
+	d_arrest [shape=diamond, fillcolor=yellow, label="Respiratory arrest?"];
+	d_response [shape=diamond, fillcolor=yellow, label="Response to treatment?"];
+	// Parallel
+	p1 [shape=circle, label="", width=0.2, fillcolor=black];
+	p2 [shape=circle, label="", width=0.2, fillcolor=black];
+
+	// Arcs
+	e_start -> c_ae -> d_arrest;
+	d_arrest -> a_vent_support [label="yes"];
+	a_vent_support -> e_end;
+	d_arrest -> a_beta_agonists [label="no"];
+	a_beta_agonists -> d_response;
+	d_response -> a_nsaid [label="good"];
+	a_nsaid -> e_end;
+	d_response -> a_inh_cortico [label="moderate"];
+	a_inh_cortico-> e_end;
+	d_response -> p1 [label="poor"];
+	p1 -> a_oral_cortico -> p2;
+	p1 -> a_anti -> p2;
+	p2 -> e_end;
+}

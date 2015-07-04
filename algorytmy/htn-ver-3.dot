@@ -1,0 +1,73 @@
+// UHTN - uncontrolled hypertension 
+// this version is based on the NICE guideline, but it was simplified
+// version 3 - customized for presentation in pseudo-code
+
+digraph HTN {
+	ranksep=0.1;
+node [shape=box, style=filled, fillcolor=green, fontname=Calibri, fontsize=11];
+edge [fontname="Calibri Italic", fontsize=10];
+
+// Context
+c_htn [label="Patient diagnosed \n with HTN", shape=oval, style=filled, fillcolor=red];
+
+// Actions
+a_lifestyle_management [label="Lifestyle management"];
+a_specialist_consult [label="Cardiologist consult"];
+
+a_step1_acei [label="ACE inhibitor"];
+a_step1_ccb [label="CCB"];
+
+a_step2_acei [label="ACE inhibitor"];
+a_step2_ccb [label="CCB"];
+// Parallel gateways
+p1 [shape=circle, label="", width=0.2, fillcolor=black];
+p2 [shape=circle, label="", width=0.2, fillcolor=black];
+
+a_step3_acei [label="ACE inhibitor"];
+a_step3_ccb [label="CCB"];
+a_step3_diuretric [label="Diuretic"];
+// Parallel gateways
+p3 [shape=circle, label="", width=0.2, fillcolor=black];
+p4 [shape=circle, label="", width=0.2, fillcolor=black];
+
+// Decisions
+d_age_under_55 [shape=diamond, fillcolor=yellow, label="Age?"];
+d_bp_controlled_1 [shape=diamond, fillcolor=yellow, label="BP Test #1?"];
+d_bp_controlled_2 [shape=diamond, fillcolor=yellow, label="BP Test #2?"];
+d_bp_controlled_3 [shape=diamond, fillcolor=yellow, label="BP Test #3?"];
+
+// Event nodes
+e_start [shape=circle, label="", width=0.3, penwidth=2, fillcolor="gray"];
+e_end [shape=circle, label="", width=0.3, penwidth=6, fillcolor="gray"];
+
+
+// Arcs
+e_start -> c_htn;
+c_htn -> d_age_under_55;
+
+d_age_under_55 -> a_step1_acei [label="< 55"];
+d_age_under_55 -> a_step1_ccb [label=">= 55"];
+
+a_step1_acei -> d_bp_controlled_1;
+a_step1_ccb -> d_bp_controlled_1;
+d_bp_controlled_1 -> a_lifestyle_management [label="controlled"];
+d_bp_controlled_1 -> p1 [label="uncontrolled"];
+p1 -> a_step2_acei;
+p1 -> a_step2_ccb
+a_step2_acei -> p2;
+a_step2_ccb -> p2;
+p2 -> d_bp_controlled_2;
+d_bp_controlled_2 -> a_lifestyle_management [label="controlled"];
+d_bp_controlled_2 -> p3 [label="uncontrolled"];
+p3 -> a_step3_acei;
+p3 -> a_step3_ccb;
+p3 -> a_step3_diuretric;
+a_step3_acei -> p4;
+a_step3_ccb -> p4;
+a_step3_diuretric -> p4;
+p4 -> d_bp_controlled_3;
+d_bp_controlled_3 -> a_lifestyle_management [label="controlled"];
+d_bp_controlled_3 -> a_specialist_consult [label="uncontrolled"];
+a_lifestyle_management -> e_end;
+a_specialist_consult -> e_end;
+}
