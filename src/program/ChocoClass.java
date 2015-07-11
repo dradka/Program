@@ -394,7 +394,7 @@ public class ChocoClass {
                            panel.add(label);
                            
                            JTextField textField = new JTextField();
-                           textField.setPreferredSize(new Dimension(50,30));
+                           textField.setPreferredSize(new Dimension(50,25));
                            panel.add(textField);
                            panels.add(panel);
                         }

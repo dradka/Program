@@ -147,6 +147,7 @@ public class MainClass {
     {
         if(startProgram)
         {
+            selectedDiseases.clear();
             
             for(JCheckBox c:window.getCheckBoxGroup())
             {
@@ -160,6 +161,16 @@ public class MainClass {
                 startProgram = false;
                 selectDiseases.setVisible(false);
                 diseasesPanel.setVisible(false);
+                dataList.clear();
+                dataIdList.clear();
+                parallelNodes.clear();
+                parallelPaths.clear();
+                parallelNodesHistory.clear();
+                parallelPathsHistory.clear();
+                graphs.clear();
+                currentImages.clear();
+                lastNodes.clear();
+                therapiesOfDiseases.clear();
                 boolean stop = false;
                 int diseaseNumber = -1;
                 ArrayList<Node> startNodes = new ArrayList<Node>();
@@ -436,5 +447,9 @@ public class MainClass {
      */
     public ArrayList<ArrayList<Integer>> getParallelPathsHistory() {
         return parallelPathsHistory;
+    }
+    public void setStartProgram(boolean startProgram)
+    {
+        this.startProgram = startProgram;
     }
 }

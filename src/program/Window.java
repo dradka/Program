@@ -161,6 +161,7 @@ public class Window extends javax.swing.JFrame {
         selectedPathsLabel = new javax.swing.JLabel();
         resultsLabel = new javax.swing.JLabel();
         graphsResultsTabbedPane = new javax.swing.JTabbedPane();
+        selectDiseasesButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("System wspomagający stosowanie procedur klinicznych");
@@ -238,6 +239,13 @@ public class Window extends javax.swing.JFrame {
         mainTabbedPane.addTab("Wyniki", resultsPanel);
         mainTabbedPane.addTab("Grafy", graphsResultsTabbedPane);
 
+        selectDiseasesButton.setText("Wybierz choroby");
+        selectDiseasesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectDiseasesButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -250,8 +258,11 @@ public class Window extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(next)
-                            .addComponent(diseasesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(diseasesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(next)
+                                .addGap(44, 44, 44)
+                                .addComponent(selectDiseasesButton)))))
                 .addGap(114, 114, 114)
                 .addComponent(imagesTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(557, 557, 557))
@@ -275,7 +286,9 @@ public class Window extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(diseasesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(next)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(next)
+                            .addComponent(selectDiseasesButton))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                         .addComponent(mainTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 662, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(543, 543, 543))
@@ -295,6 +308,25 @@ public class Window extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         removeFiles();
     }//GEN-LAST:event_formWindowClosing
+
+    private void selectDiseasesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectDiseasesButtonActionPerformed
+       selectDiseases.setVisible(true);
+       diseasesPanel.setVisible(true); 
+       selectedPathsLabel.setVisible(false);
+       selectedPathsTabbedPane.removeAll();
+       conflictsLabel.setVisible(false);
+       conflictsScrollPane.setVisible(false);
+       resultsLabel.setVisible(false);
+       resultsTabbedPane.removeAll();
+       questionsTabbedPane.removeAll();
+       graphsResultsTabbedPane.removeAll();
+       imagesTabbedPane.removeAll();
+       mainClass.setStartProgram(true);
+       for(JCheckBox checkBox:checkBoxGroup)
+       {
+           checkBox.setSelected(false);
+       }
+    }//GEN-LAST:event_selectDiseasesButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -347,6 +379,7 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JPanel resultsPanel;
     private javax.swing.JTabbedPane resultsTabbedPane;
     private javax.swing.JLabel selectDiseases;
+    private javax.swing.JButton selectDiseasesButton;
     private javax.swing.JLabel selectedPathsLabel;
     private javax.swing.JTabbedPane selectedPathsTabbedPane;
     // End of variables declaration//GEN-END:variables
