@@ -1,0 +1,57 @@
+// WPW - Wolff-Parkinson-White syndrome (AIME 2013), loop expanded to 3 iterations
+
+digraph WPW_3 {
+	ranksep=0.1;
+node [shape=box, style=filled, fillcolor=green, fontname=Calibri, fontsize=11];
+edge [fontname="Calibri Italic", fontsize=10];
+
+// Context
+c_wpw [label="Wolff-Parkinson-White \n syndrome  [WPW]", shape=oval, style=filled, fillcolor=red];
+
+// Decisions
+d_stable_0 [shape=diamond, fillcolor=yellow, label="WPW stable \n [WS(0)]?"];
+d_stable_1 [shape=diamond, fillcolor=yellow, label="WPW stable \n [WS(1)]?"];
+d_stable_2 [shape=diamond, fillcolor=yellow, label="WPW stable \n [WS(2)]?"];
+d_safe_0 [shape=diamond, fillcolor=yellow, label="Current dosage \n of flecainide safe \n [DF(0) < DFsafe]?"];
+d_safe_1 [shape=diamond, fillcolor=yellow, label="Current dosage \n of flecainide safe \n [DF(1) < DFsafe]?"];
+d_safe_2 [shape=diamond, fillcolor=yellow, label="Current dosage \n of flecainide safe \n [DF(2) < DFsafe]?"];
+
+// Actions
+a_adjust_dosage_1 [label="Adjust dosage \n of flecainide \n [DF(1)=DF(0)+deltaF]"];
+a_adjust_dosage_2 [label="Adjust dosage \n of flecainide \n [DF(2)=DF(1)+deltaF]"];
+a_adjust_dosage_3 [label="Adjust dosage \n of flecainide \n [DF(3)=DF(2)+deltaF]"];
+a_keep_dosage_0 [label="Keep dosage \n of flecainide \n [DF=DF(0)]"];
+a_keep_dosage_1 [label="Keep dosage \n of flecainide \n [DF=DF(1)]"];
+a_keep_dosage_2 [label="Keep dosage \n of flecainide \n [DF=DF(2)]"];
+a_keep_dosage_3 [label="Keep dosage \n of flecainide \n [DF=DF(3)]"];
+a_another_therapy [label="Another therapy [AT]"];
+a_discharge [label="Discharge patient [DP]"];
+
+// Event nodes
+e_start [shape=circle, label="", width=0.3, penwidth=2, fillcolor="gray"];
+e_end [shape=circle, label="", width=0.3, penwidth=6, fillcolor="gray"];
+
+e_start -> c_wpw -> a_initial_dosage -> d_stable_0;
+d_stable_0 -> a_keep_dosage_0 [label=yes];
+a_keep_dosage_0 -> a_discharge;
+d_stable_0 -> d_safe_0 [label=no];
+d_safe_0 -> a_another_therapy [label=no];
+d_safe_0 -> a_adjust_dosage_1 [label=yes];
+a_adjust_dosage_1 -> d_stable_1;
+
+d_stable_1 -> a_keep_dosage_1 [label=yes];
+a_keep_dosage_1 -> a_discharge;
+d_stable_1 -> d_safe_1 [label=no];
+d_safe_1 -> a_another_therapy [label=no];
+d_safe_1 -> a_adjust_dosage_2 [label=yes];
+a_adjust_dosage_2 -> d_stable_2;
+
+d_stable_2 -> a_keep_dosage_2 [label=yes];
+a_keep_dosage_2 -> a_discharge;
+d_stable_2 -> d_safe_2 [label=no];
+d_safe_2 -> a_another_therapy [label=no];
+d_safe_2 -> a_adjust_dosage_3 [label=yes];
+a_adjust_dosage_3 -> a_keep_dosage_3 -> a_discharge -> e_end;
+
+a_another_therapy -> a_discharge;
+}

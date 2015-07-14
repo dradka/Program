@@ -6,6 +6,8 @@
 
 package program;
 
+import com.alexmerz.graphviz.objects.Graph;
+import com.alexmerz.graphviz.objects.Node;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -48,6 +50,7 @@ public class ChocoClass {
     private ArrayList<IntVar> addedVarsList;
     private ArrayList<IntVar> therapiesList;
     private ArrayList<IntVar> globalConflictsList;
+    private ArrayList<String> notConflictElems;
     private void setAdditionalVariables(ArrayList<JPanel> panels, Solver s)
     {
         addedVarsList = new ArrayList<IntVar>();
@@ -77,7 +80,8 @@ public class ChocoClass {
         }
         
     }
-    private void setVariables(ArrayList<String> diseases, ArrayList<ArrayList<ArrayList<String>>> therapiesOfDiseases, Solver s)
+    private void setVariables(ArrayList<String> diseases, ArrayList<ArrayList<ArrayList<String>>> therapiesOfDiseases, Solver s, 
+            ArrayList<Graph> graphs)
     {
         therapiesList = new ArrayList<IntVar>();
         globalConflictsList = new ArrayList<IntVar>();
@@ -93,8 +97,90 @@ public class ChocoClass {
                 IntVar therapyVar = VariableFactory.bounded(therapyStr, 0, 1, s);
                 therapiesVar[counter] = therapyVar;
                 therapiesList.add(therapyVar);
-                IntVar[] vars = new IntVar[therapy.size()+1];
+                
+                ArrayList<String> notFoundNotConflictElems = new ArrayList<String>();
+                for(String c:notConflictElems)
+                {
+                    boolean exists = false;
+                    for(String medicine:therapy)
+                    {
+                        String medicineName = medicine;
+                        if(medicine.indexOf('=')>=0 && !(medicine.indexOf('?')>=0))
+                        {
+                            medicineName = medicine.substring(0, medicine.indexOf('='));
+                        }
+                        if(medicineName.equals(c))
+                        {
+                            exists = true;
+                        }
+                    }
+                    if(!exists)
+                    {
+                        boolean exists2 = false;
+                        for(String c2:notFoundNotConflictElems)
+                        {
+                            if(c.equals(c2))
+                            {
+                                exists2 = true;
+                            }
+                        }
+                        if(!exists2)
+                        {
+                            for(Node n:graphs.get(i).getNodes(false))
+                            {
+                                if(n.getId().getId().equals(c))
+                                {
+                                    notFoundNotConflictElems.add(c);
+                                }
+                            }
+                        }
+                    }
+                }
+                IntVar[] vars = new IntVar[therapy.size()+notFoundNotConflictElems.size()+1];
+                
                 int counter2=0;
+                for(String c:notFoundNotConflictElems)
+                {
+                    IntVar medicineVar = null;
+                    boolean addedVar = false;
+                    for(IntVar elem:addedVarsList)
+                    {
+                        if(elem.getName().equals(c))
+                        {
+                            addedVar = true;
+                            globalConflictsList.add(elem);
+                            medicineVar = elem;
+                        }
+                    }
+                    if(!addedVar)
+                    {
+                        medicineVar = VariableFactory.bounded(c, 0, 1, s);
+                        addedVarsList.add(medicineVar);
+                        globalConflictsList.add(medicineVar);
+                    }
+                    addedVar = false;
+                    IntVar notMedicineVar = null;
+                    for(IntVar elem:addedVarsList)
+                    {
+                        if(elem.getName().equals("not_"+c))
+                        {
+                            addedVar = true;
+                            globalConflictsList.add(elem);
+                            notMedicineVar = elem;
+                        }
+                    }
+                    if(!addedVar)
+                    {
+                        notMedicineVar = VariableFactory.bounded("not_"+c, 0, 1, s);
+                        LogicalConstraintFactory.ifThenElse(IntConstraintFactory.arithm(medicineVar,"=", 1), 
+                            IntConstraintFactory.arithm(notMedicineVar,"=",0), 
+                            IntConstraintFactory.arithm(notMedicineVar,"=",1));
+                        addedVarsList.add(notMedicineVar);
+                        globalConflictsList.add(notMedicineVar);
+                    }
+                    vars[counter2] = notMedicineVar;
+                    counter2++;
+                }
                 for(String medicine:therapy)
                 {
                     String medicineName = medicine;
@@ -112,8 +198,31 @@ public class ChocoClass {
                             medicineVar = elem;
                         }
                     }
-                    if(!addedVar)
+                    if(addedVar)
                     {
+                        if(medicine.indexOf('=')>=0 && !(medicine.indexOf('?')>=0))
+                        {
+                            boolean addedVar2 = false;
+                            for(IntVar elem2:addedVarsList)
+                            {
+                                if(elem2.getName().equals(medicineName+"_dosage"))
+                                {
+                                    addedVar2 = true;
+                                }
+                            }
+                            if(!addedVar2)
+                            {
+                                int value = Integer.parseInt(medicine.substring(medicine.indexOf('=')+1));
+                                addedVarsList.add(VariableFactory.bounded(medicineName+"_dosage", value, value, s));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if(medicineName.equals("a_dipyridamole"))
+                        {
+                            int a = 0;
+                        }
                         medicineVar = VariableFactory.bounded(medicineName, 0, 1, s);
                         addedVarsList.add(medicineVar);
                         if(medicine.indexOf('=')>=0 && !(medicine.indexOf('?')>=0))
@@ -125,12 +234,14 @@ public class ChocoClass {
                     vars[counter2] = medicineVar;
                     counter2++;
                 }
-                vars[therapy.size()]=VariableFactory.bounded("additional"+String.valueOf(i)+"."+String.valueOf(counter), 
+                vars[therapy.size()+notFoundNotConflictElems.size()]=
+                VariableFactory.bounded("additional"+String.valueOf(i)+"."+String.valueOf(counter), 
                         0, 1, s);
                 IntVar sum = VariableFactory.bounded("sum"+String.valueOf(i)+"."+String.valueOf(counter), 
                         0, vars.length, s);
                 s.post(IntConstraintFactory.sum(vars, sum));
-                LogicalConstraintFactory.ifThenElse(IntConstraintFactory.arithm(sum,"=",vars.length), 
+                LogicalConstraintFactory.ifThenElse(IntConstraintFactory.arithm(sum,"=",
+                        vars.length), 
                         IntConstraintFactory.arithm(therapyVar,"=",1), 
                         IntConstraintFactory.arithm(therapyVar,"=",0));
                 counter++;
@@ -198,7 +309,6 @@ public class ChocoClass {
                 }
                 else if(conflict[i].indexOf("<=")>=0)
                 {
-                    int a = conflict[i].indexOf("<=");
                     name = conflict[i].substring(0, conflict[i].indexOf("<="));
                     sign = "<=";
                     dosage = Integer.parseInt(conflict[i].substring(conflict[i].indexOf("<=")+2));
@@ -222,6 +332,31 @@ public class ChocoClass {
                     dosage = Integer.parseInt(conflict[i].substring(conflict[i].indexOf('<')+1));
                 }
                 conflictWithDosage(constraintsList, name, sign, dosage, s);
+            }
+            else if(conflict[i].startsWith("not"))
+            {
+                if(conflict[i].equals("not(a_dipyridamole)"))
+                {
+                    int a = 0;
+                }
+                String c = conflict[i].substring(conflict[i].indexOf('(')+1, conflict[i].indexOf(')'));
+                boolean addedVar = false;
+                for(IntVar elem:addedVarsList)
+                {
+                    if(elem.getName().equals(c))
+                    {
+                        constraintsList.add(not(IntConstraintFactory.arithm(elem, "=", 1)));
+                        globalConflictsList.add(elem);
+                        addedVar = true;
+                    }
+                }
+                if(!addedVar)
+                {
+                    IntVar var = VariableFactory.bounded(c, 0, 1, s);
+                    addedVarsList.add(var);
+                    globalConflictsList.add(var);
+                    constraintsList.add(not(IntConstraintFactory.arithm(var, "=", 1)));
+                }
             }
             else
             {
@@ -270,11 +405,12 @@ public class ChocoClass {
             }
         }
     }
-    public void solve(Window window, ArrayList<String> diseases, ArrayList<ArrayList<ArrayList<String>>> therapiesOfDiseases)
+    public void solve(Window window, ArrayList<String> diseases, ArrayList<ArrayList<ArrayList<String>>> therapiesOfDiseases, 
+            ArrayList<Graph> graphs)
     {  
+        notConflictElems = new ArrayList<String>();
         ArrayList<String[]> foundConflicts = new ArrayList<String[]>();
         ArrayList<ArrayList<String[]>> executedInteractions = new ArrayList<ArrayList<String[]>>();
-        
         ArrayList<String[]> conflictsList = new ArrayList<String[]>();
         ArrayList<ArrayList<String[]>> interactionsList = new ArrayList<ArrayList<String[]>>();
         ArrayList<Integer> avoidedConflicts = new ArrayList<Integer>();
@@ -317,6 +453,11 @@ public class ChocoClass {
                             {
                                 additionalQuestions.add(array[k]);
                             }
+                            else if(array[k].startsWith("not"))
+                            {
+                                String c = array[k].substring(array[k].indexOf('(')+1, array[k].indexOf(')'));
+                                notConflictElems.add(c);
+                            }
                         }
                         conflictsList.add(array);
                         String[] array2 = line.substring(line.indexOf(':')+1).split(",");
@@ -345,7 +486,7 @@ public class ChocoClass {
         {
            solveNextPart(conflictsList, therapiesOfDiseases,
             diseases,  avoidedConflicts, foundConflicts,
-            executedInteractions, interactionsList, window, null);
+            executedInteractions, interactionsList, window, null, graphs);
         }
         else
         {
@@ -474,7 +615,7 @@ public class ChocoClass {
                 {
                     solveNextPart(conflictsList, therapiesOfDiseases,
                         diseases,  avoidedConflicts, foundConflicts,
-                        executedInteractions, interactionsList, window, panels);
+                        executedInteractions, interactionsList, window, panels, graphs);
                 }
             }
         }
@@ -483,13 +624,13 @@ public class ChocoClass {
     private void solveNextPart(ArrayList<String[]> conflictsList, ArrayList<ArrayList<ArrayList<String>>> therapiesOfDiseases,
             ArrayList<String> diseases,  ArrayList<Integer> avoidedConflicts, ArrayList<String[]> foundConflicts,
             ArrayList<ArrayList<String[]>> executedInteractions, ArrayList<ArrayList<String[]>> interactionsList,
-            Window window, ArrayList<JPanel> panels)
+            Window window, ArrayList<JPanel> panels, ArrayList<Graph> graphs)
     {
         for(String[] conflict:conflictsList)
         {
             Solver s = new Solver();
             setAdditionalVariables(panels, s);
-            setVariables(diseases, therapiesOfDiseases, s);
+            setVariables(diseases, therapiesOfDiseases, s, graphs);
             for(Integer k:avoidedConflicts)
             {
                 setConflictConstraint(conflictsList.get(k), s);
@@ -511,7 +652,7 @@ public class ChocoClass {
         }
         Solver s = new Solver();
         setAdditionalVariables(panels, s);
-        setVariables(diseases, therapiesOfDiseases, s);
+        setVariables(diseases, therapiesOfDiseases, s, graphs);
         for(Integer k:avoidedConflicts)
         {
             setConflictConstraint(conflictsList.get(k), s);

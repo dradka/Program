@@ -408,19 +408,33 @@ public class Results {
             for(int i=0;i<conflict.length;i++)
             {
                 String text = conflict[i];
+                boolean notConflictElem = false;
+                if(text.startsWith("not"))
+                {
+                    text = conflict[i].substring(conflict[i].indexOf('(')+1, conflict[i].indexOf(')'));
+                    notConflictElem = true;
+                }
                 for(Graph g:graphs)
                 {
                     for(Node n:g.getNodes(false))
                     {
-                        if(n.getId().getId().equals(conflict[i]))
+                        if(n.getId().getId().equals(text))
                         {
                             if(n.getAttribute("label")!=null && !n.getAttribute("label").equals(""))
                             {
-                                text=n.getAttribute("label")+" ("+selectedDiseases.get(graphs.indexOf(g))+")";
+                                if(notConflictElem)
+                                {
+                                    text="not("+n.getAttribute("label")+") ("+selectedDiseases.get(graphs.indexOf(g))+")";
+                                }
+                                else
+                                {
+                                    text=n.getAttribute("label")+" ("+selectedDiseases.get(graphs.indexOf(g))+")";
+                                }
                             }
                         }
                     }
                 }
+                
                 if(i<conflict.length-1)
                 {
                     conflictsText = conflictsText + text + ", ";

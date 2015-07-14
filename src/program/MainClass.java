@@ -383,7 +383,7 @@ public class MainClass {
             }
             
             ChocoClass chocoClass = new ChocoClass();
-            chocoClass.solve(window, selectedDiseases, therapiesOfDiseases);
+            chocoClass.solve(window, selectedDiseases, therapiesOfDiseases, graphs);
         }
     }
      /**

@@ -1,0 +1,36 @@
+// DU - duodenal ulcer (KR4HC 2014)
+
+digraph DU {
+	ranksep=0.1;
+node [shape=box, style=filled, fillcolor=green, fontname=Calibri, fontsize=11];
+edge [fontname="Calibri Italic", fontsize=10];
+
+// Context
+c_du [label="Duodenal ulcer", shape=oval, style=filled, fillcolor=red];
+
+// Decisions
+d_hpylori [shape=diamond, fillcolor=yellow, label="H.pylori?"];
+d_ze_syndrome [shape=diamond, fillcolor=yellow, label="Z-E syndrome?"];
+d_endoscopy [shape=diamond, fillcolor=yellow, label="Ulcer \n on endoscopy?"];
+
+// Actions
+a_eradicaion [label="Eradication therapy"];
+a_ppi [label="Proton-pump inhibitors (PPI)"];
+a_self_care [label="Self care"];
+a_specialist [label="Refer to specialist"];
+
+// Event nodes
+e_start [shape=circle, label="", width=0.3, penwidth=2, fillcolor="gray"];
+e_end [shape=circle, label="", width=0.3, penwidth=6, fillcolor="gray"];
+
+e_start -> c_du -> d_hpylori;
+d_hpylori -> a_eradicaion [label=positive];
+d_hpylori -> d_ze_syndrome [label=negative];
+a_eradicaion -> a_ppi -> d_endoscopy;
+d_endoscopy -> a_self_care [label=healed];
+d_endoscopy -> a_specialist [label="not healed"];
+d_ze_syndrome -> a_ppi [label=negative];
+d_ze_syndrome -> a_specialist [label=positive];
+a_specialist -> e_end;
+a_self_care -> e_end;
+}

@@ -5,3 +5,4 @@ warfarin:Warfarin
 BB:BB
 warfarin2:Maintenance therapy: Warfarin
 aspirin:Long-term therapy: Aspirin
+a_ppi2:Proton-pump inhibitors (PPI)

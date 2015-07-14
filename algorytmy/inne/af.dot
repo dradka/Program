@@ -1,0 +1,38 @@
+// AF - atrial fibrillation (AIME 2013)
+
+digraph AF {
+	ranksep=0.1;
+node [shape=box, style=filled, fillcolor=green, fontname=Calibri, fontsize=11];
+edge [fontname="Calibri Italic", fontsize=10];
+
+// Context
+c_af [label="Atrial fibrillation [AF]", shape=oval, style=filled, fillcolor=red];
+
+// Decisions
+d_hemo_instability [shape=diamond, fillcolor=yellow, label="Hemodynamic \n instability [HI]?"];
+d_heart_disease [shape=diamond, fillcolor=yellow, label="Structured \n heart disease [HD]?"];
+d_recurring [shape=diamond, fillcolor=yellow, label="Recurring AF \n episode [RAE]?"];
+
+// Actions
+a_cardioversion [label="Electrical cardioversion [EC]"];
+a_amiodarione_iv [label="IV amiodarone [AIV]"];
+a_flecainide [label="IV flecainide [FIV]"];
+a_amiodarone_o [label="Oral amiodarone [A]"];
+a_discharge [label="Discharge patient [DP]"];
+
+// Event nodes
+e_start [shape=circle, label="", width=0.3, penwidth=2, fillcolor="gray"];
+e_end [shape=circle, label="", width=0.3, penwidth=6, fillcolor="gray"];
+
+e_start -> c_af -> d_hemo_instability;
+d_hemo_instability -> a_cardioversion [label=yes];
+d_hemo_instability -> d_heart_disease [label=no];
+a_cardioversion -> d_recurring;
+d_heart_disease -> a_amiodarione_iv [label=yes];
+d_heart_disease -> a_flecainide [label=no];
+a_amiodarione_iv -> d_recurring;
+a_flecainide -> d_recurring;
+d_recurring -> a_amiodarone_o [label=yes];
+d_recurring -> a_discharge [label=no];
+a_amiodarone_o -> a_discharge -> e_end;
+}

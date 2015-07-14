@@ -1,0 +1,34 @@
+// WPW - Wolff-Parkinson-White syndrome (AIME 2013)
+
+digraph WPW_loop {
+	ranksep=0.1;
+node [shape=box, style=filled, fillcolor=green, fontname=Calibri, fontsize=11];
+edge [fontname="Calibri Italic", fontsize=10];
+
+// Context
+c_wpw [label="Wolff-Parkinson-White \n syndrome  [WPW]", shape=oval, style=filled, fillcolor=red];
+
+// Decisions
+d_stable [shape=diamond, fillcolor=yellow, label="WPW stable [WS(k)]?"];
+d_safe [shape=diamond, fillcolor=yellow, label="Current dosage \n of flecainide safe \n [DF(k) < DFsafe]?"];
+
+// Actions
+a_initial_dosage [label="Initial dosage \n of flecainide  \n[DF(0)=DFlow]"];
+a_adjust_dosage [label="Adjust dosage \n of flecainide \n [DF(k+1)=DF(k)+deltaF]"];
+a_keep_dosage [label="Keep dosage \n of flecainide \n [DF=DF(k)]"];
+a_another_therapy [label="Another therapy [AT]"];
+a_discharge [label="Discharge patient [DP]"];
+
+// Event nodes
+e_start [shape=circle, label="", width=0.3, penwidth=2, fillcolor="gray"];
+e_end [shape=circle, label="", width=0.3, penwidth=6, fillcolor="gray"];
+
+e_start -> c_wpw -> a_initial_dosage -> d_stable;
+d_stable -> a_keep_dosage [label=yes];
+a_keep_dosage -> a_discharge -> e_end;
+d_stable -> d_safe [label=no];
+d_safe -> a_adjust_dosage [label=yes];
+a_adjust_dosage-> d_stable;
+d_safe -> a_another_therapy [label=no];
+a_another_therapy -> a_discharge;
+}

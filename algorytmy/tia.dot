@@ -1,0 +1,45 @@
+// TIA - transient ischemic attack (KR4HC 2014)
+
+digraph TIA {
+	ranksep=0.1;
+node [shape=box, style=filled, fillcolor=green, fontname=Calibri, fontsize=11];
+edge [fontname="Calibri Italic", fontsize=10];
+
+// Context
+c_tia [label="Transient \n ischemic attack [TIA]", shape=oval, style=filled, fillcolor=red];
+
+// Decisions
+d_hypoglycemia [shape=diamond, fillcolor=yellow, label="Hypoglycemia?"];
+d_fast [shape=diamond, fillcolor=yellow, label="Face-arm-speech \n test (FAST)?"];
+d_neuro_symptoms [shape=diamond, fillcolor=yellow, label="Neurological \n symptoms?"];
+d_stroke_risk [shape=diamond, fillcolor=yellow, label="Risk of stroke?"];
+
+// Actions
+a_prim_care_specialit [label="Refer to primary care specialist"];
+a_aspirin [label="Aspirin [300]"];
+a_dipyridamole [label="Dipyridamole [75]"];
+a_treat_stroke [label="Treat for stroke"];
+a_endo_consult [label="Out-patient \n endocrynology consult"];
+a_neuro_consult [label="Out-patient \n neurological consult"];
+
+// Event nodes
+e_start [shape=circle, label="", width=0.3, penwidth=2, fillcolor="gray"];
+e_end [shape=circle, label="", width=0.3, penwidth=6, fillcolor="gray"];
+
+e_start -> c_tia -> d_hypoglycemia;
+d_hypoglycemia -> d_fast [label=negative];
+d_hypoglycemia -> a_endo_consult [label=positive];
+a_endo_consult -> e_end;
+d_fast -> d_neuro_symptoms [label=posiitve];
+d_fast -> a_prim_care_specialit [label=negative];
+a_prim_care_specialit -> e_end;
+d_neuro_symptoms -> a_aspirin [label=resolved];
+d_neuro_symptoms -> a_treat_stroke [label="not resolved"];
+a_aspirin -> d_stroke_risk;
+d_stroke_risk -> a_prim_care_specialit [label="negligible"];
+d_stroke_risk -> a_dipyridamole [label=elevated];
+a_dipyridamole -> a_neuro_consult;
+a_treat_stroke -> a_neuro_consult;
+a_neuro_consult -> e_end;
+
+}
