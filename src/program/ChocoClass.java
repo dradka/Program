@@ -98,7 +98,7 @@ public class ChocoClass {
                 therapiesVar[counter] = therapyVar;
                 therapiesList.add(therapyVar);
                 
-                ArrayList<String> notFoundNotConflictElems = new ArrayList<String>();
+                ArrayList<String> notConflictElemsTherapy = new ArrayList<String>();
                 for(String c:notConflictElems)
                 {
                     boolean exists = false;
@@ -117,7 +117,7 @@ public class ChocoClass {
                     if(!exists)
                     {
                         boolean exists2 = false;
-                        for(String c2:notFoundNotConflictElems)
+                        for(String c2:notConflictElemsTherapy)
                         {
                             if(c.equals(c2))
                             {
@@ -130,16 +130,16 @@ public class ChocoClass {
                             {
                                 if(n.getId().getId().equals(c))
                                 {
-                                    notFoundNotConflictElems.add(c);
+                                    notConflictElemsTherapy.add(c);
                                 }
                             }
                         }
                     }
                 }
-                IntVar[] vars = new IntVar[therapy.size()+notFoundNotConflictElems.size()+1];
+                IntVar[] vars = new IntVar[therapy.size()+notConflictElemsTherapy.size()+1];
                 
                 int counter2=0;
-                for(String c:notFoundNotConflictElems)
+                for(String c:notConflictElemsTherapy)
                 {
                     IntVar medicineVar = null;
                     boolean addedVar = false;
@@ -219,10 +219,6 @@ public class ChocoClass {
                     }
                     else
                     {
-                        if(medicineName.equals("a_dipyridamole"))
-                        {
-                            int a = 0;
-                        }
                         medicineVar = VariableFactory.bounded(medicineName, 0, 1, s);
                         addedVarsList.add(medicineVar);
                         if(medicine.indexOf('=')>=0 && !(medicine.indexOf('?')>=0))
@@ -234,7 +230,7 @@ public class ChocoClass {
                     vars[counter2] = medicineVar;
                     counter2++;
                 }
-                vars[therapy.size()+notFoundNotConflictElems.size()]=
+                vars[therapy.size()+notConflictElemsTherapy.size()]=
                 VariableFactory.bounded("additional"+String.valueOf(i)+"."+String.valueOf(counter), 
                         0, 1, s);
                 IntVar sum = VariableFactory.bounded("sum"+String.valueOf(i)+"."+String.valueOf(counter), 
@@ -335,10 +331,6 @@ public class ChocoClass {
             }
             else if(conflict[i].startsWith("not"))
             {
-                if(conflict[i].equals("not(a_dipyridamole)"))
-                {
-                    int a = 0;
-                }
                 String c = conflict[i].substring(conflict[i].indexOf('(')+1, conflict[i].indexOf(')'));
                 boolean addedVar = false;
                 for(IntVar elem:addedVarsList)

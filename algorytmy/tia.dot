@@ -30,7 +30,7 @@ e_start -> c_tia -> d_hypoglycemia;
 d_hypoglycemia -> d_fast [label=negative];
 d_hypoglycemia -> a_endo_consult [label=positive];
 a_endo_consult -> e_end;
-d_fast -> d_neuro_symptoms [label=posiitve];
+d_fast -> d_neuro_symptoms [label=positve];
 d_fast -> a_prim_care_specialit [label=negative];
 a_prim_care_specialit -> e_end;
 d_neuro_symptoms -> a_aspirin [label=resolved];
