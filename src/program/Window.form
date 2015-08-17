@@ -79,11 +79,11 @@
                           <Component id="next" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="selectDiseasesButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="38" max="32767" attributes="0"/>
-                      <Component id="mainTabbedPane" min="-2" pref="662" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="mainTabbedPane" min="-2" pref="604" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="543" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="634" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -181,7 +181,7 @@
                       <Component id="resultsLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="resultsTabbedPane" min="-2" pref="189" max="-2" attributes="0"/>
-                      <EmptySpace pref="60" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

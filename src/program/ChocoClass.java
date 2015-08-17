@@ -635,7 +635,7 @@ public class ChocoClass {
             {
                 foundConflicts.add(conflict);
                 executedInteractions.add(interactionsList.get(conflictsList.indexOf(conflict)));
-                //executeInteractions(interactionsList, conflictsList, conflict, therapiesOfDiseases);
+                ExecuteInteractions.executeInteractions(interactionsList, conflictsList, conflict, therapiesOfDiseases);
             }
             else
             {

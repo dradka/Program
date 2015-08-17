@@ -70,143 +70,83 @@ public class Results {
                     {
                         if(interaction[0].equals("replace"))
                         {
-                            boolean onPath = false;
-                            for(String s:therapy)
+                            for(Node n:graph.getNodes(false))
                             {
-                                if(s.equals(interaction[1])
-                                   ||(s.indexOf('=')>=0 && !(s.indexOf('?')>=0)
-                                        && s.substring(0,s.indexOf('=')).equals(interaction[1])))
+                                if(n.getId().getId().equals(interaction[1]))
                                 {
-                                    onPath = true;
-                                }
-                            }
-                            if(onPath)
-                            {
-                                Node replaceNode = null;
-                                for(Node n:graph.getNodes(false))
-                                {
-                                    if(n.getId().getId().equals(interaction[1]))
+                                    String label = getNodeLabel(interaction[3]);
+                                    if(label!=null)
                                     {
-                                        String label = getNodeLabel(interaction[3]);
-                                        if(label!=null)
-                                        {
-                                            n.setAttribute("label", label);
-                                        }
-                                        else
-                                        {
-                                            n.setAttribute("label", interaction[3]);
-                                        }
-                                        n.setAttribute("color", "blue");
-                                        if(!n.getId().getId().equals("e_start")&&!n.getId().getId().equals("e_end"))
-                                        {
-                                            n.setAttribute("penwidth", "2");
-                                        }
-                                        ArrayList<Edge> edges = GraphFunctions.getOutEdges(graph, n);
-                                        for(Edge e:edges)
-                                        {
-                                            e.setAttribute("color", "blue");
-                                            e.setAttribute("penwidth", "2");
-                                        }
+                                        n.setAttribute("label", label);
                                     }
+                                    else
+                                    {
+                                        n.setAttribute("label", interaction[3]);
+                                    }
+                                    Id id = new Id();
+                                    id.setId(interaction[3]);
+                                    n.setId(id);
+                                    /*
+                                    n.setAttribute("color", "blue");
+                                    if(!n.getId().getId().equals("e_start")&&!n.getId().getId().equals("e_end"))
+                                    {
+                                        n.setAttribute("penwidth", "2");
+                                    }
+                                    ArrayList<Edge> edges = GraphFunctions.getOutEdges(graph, n);
+                                    for(Edge e:edges)
+                                    {
+                                        e.setAttribute("color", "blue");
+                                        e.setAttribute("penwidth", "2");
+                                    }
+                                    */
                                 }
                             }
                         }
                         else if(interaction[0].equals("add"))
                         {
-                            boolean onPath = false;
-                            for(String s:therapy)
+                       
+                            Node n = null;
+                            for(Node node:graph.getNodes(false))
                             {
-                                if(s.equals(interaction[3])
-                                   ||(s.indexOf('=')>=0 && !(s.indexOf('?')>=0)
-                                        && s.substring(0,s.indexOf('=')).equals(interaction[3])))
+                                if((interaction[3].indexOf('?')>=0
+                                        && node.getId().getId().equals(
+                                                interaction[3].substring(0, interaction[3].lastIndexOf('?')))
+                                        &&interaction[2].equals("after"))
+                                   ||node.getId().getId().equals(interaction[3]))
                                 {
-                                    onPath = true;
+                                   n = node;
                                 }
                             }
-                            if(onPath)
+                            if(n!=null)
                             {
-                                Node n = null;
-                                for(Node node:graph.getNodes(false))
+                                Node newNode = new Node();
+                                Id id = new Id();
+                                id.setId(interaction[1]);
+                                newNode.setId(id);
+                                String label = getNodeLabel(interaction[1]);
+                                if(label!=null)
                                 {
-                                    if((interaction[3].indexOf('?')>=0
-                                            && node.getId().getId().equals(
-                                                    interaction[3].substring(0, interaction[3].lastIndexOf('?')))
-                                            &&interaction[2].equals("after"))
-                                       ||node.getId().getId().equals(interaction[3]))
-                                    {
-                                       n = node;
-                                    }
+                                    newNode.setAttribute("label", label);
                                 }
-                                if(n!=null)
+                                else
                                 {
-                                    Node newNode = new Node();
-                                    Id id = new Id();
-                                    id.setId(interaction[1]);
-                                    newNode.setId(id);
-                                    String label = getNodeLabel(interaction[1]);
-                                    if(label!=null)
-                                    {
-                                        newNode.setAttribute("label", label);
-                                    }
-                                    else
-                                    {
-                                        newNode.setAttribute("label", interaction[1]);
-                                    }
-                                    graph.addNode(newNode);
-                                    if(interaction[3].indexOf('?')>=0)
-                                    {   
-                                       ArrayList<Edge> edges = GraphFunctions.getOutEdges(graph, n); 
-                                       for(Edge e:edges)
+                                    newNode.setAttribute("label", interaction[1]);
+                                }
+                                graph.addNode(newNode);
+                                if(interaction[3].indexOf('?')>=0)
+                                {   
+                                   ArrayList<Edge> edges = GraphFunctions.getOutEdges(graph, n); 
+                                   for(Edge e:edges)
+                                   {
+                                       if(e.getAttribute("label").equals(
+                                               interaction[3].substring(interaction[3].lastIndexOf('?')+1)))
                                        {
-                                           if(e.getAttribute("label").equals(
-                                                   interaction[3].substring(interaction[3].lastIndexOf('?')+1)))
-                                           {
-                                               Node targetNode = e.getTarget().getNode();
-                                               e.setTarget(new PortNode(newNode));
-                                               Edge newEdge = new Edge(new PortNode(newNode), new PortNode(targetNode), 
-                                                       Graph.DIRECTED);
-                                               graph.addEdge(newEdge);
-                                               newNode.setAttribute("color", "blue");
-                                               if(!newNode.getId().getId().equals("e_start")
-                                                       &&!newNode.getId().getId().equals("e_end"))
-                                               {
-                                                  newNode.setAttribute("penwidth", "2");
-                                               }
-                                               newEdge.setAttribute("color", "blue");
-                                               newEdge.setAttribute("penwidth", "2");
-                                           }
-                                       }
-                                    }
-                                    else
-                                    {
-                                        if(interaction[2].equals("after"))
-                                        {
-                                           ArrayList<Edge> edges = GraphFunctions.getOutEdges(graph, n);
-                                           if(edges.size()>0)
-                                           {
-                                                Edge e = edges.get(0);
-                                                e.setSource(new PortNode(newNode));
-                                                Edge newEdge = new Edge(new PortNode(n), new PortNode(newNode), Graph.DIRECTED);
-                                                graph.addEdge(newEdge);
-                                                newNode.setAttribute("color", "blue");
-                                                if(!newNode.getId().getId().equals("e_start")
-                                                        &&!newNode.getId().getId().equals("e_end"))
-                                                {
-                                                   newNode.setAttribute("penwidth", "2");
-                                                }
-                                                e.setAttribute("color", "blue");
-                                                e.setAttribute("penwidth", "2");
-                                           }
-                                        }
-                                        else if(interaction[2].equals("before"))
-                                        {
-                                           ArrayList<Edge> edges = GraphFunctions.getInEdges(graph, n);
-                                           for(Edge e:edges)
-                                           {
-                                               e.setTarget(new PortNode(newNode));
-                                           }
-                                           Edge newEdge = new Edge(new PortNode(newNode), new PortNode(n), Graph.DIRECTED);
+                                           Node targetNode = e.getTarget().getNode();
+                                           e.setTarget(new PortNode(newNode));
+                                           Edge newEdge = new Edge(new PortNode(newNode), new PortNode(targetNode), 
+                                                   Graph.DIRECTED);
                                            graph.addEdge(newEdge);
+                                           /*
                                            newNode.setAttribute("color", "blue");
                                            if(!newNode.getId().getId().equals("e_start")
                                                    &&!newNode.getId().getId().equals("e_end"))
@@ -215,75 +155,95 @@ public class Results {
                                            }
                                            newEdge.setAttribute("color", "blue");
                                            newEdge.setAttribute("penwidth", "2");
-                                        }                         
+                                           */
+                                       }
+                                   }
+                                }
+                                else
+                                {
+                                    if(interaction[2].equals("after"))
+                                    {
+                                       ArrayList<Edge> edges = GraphFunctions.getOutEdges(graph, n);
+                                       if(edges.size()>0)
+                                       {
+                                            Edge e = edges.get(0);
+                                            e.setSource(new PortNode(newNode));
+                                            Edge newEdge = new Edge(new PortNode(n), new PortNode(newNode), Graph.DIRECTED);
+                                            graph.addEdge(newEdge);
+                                            /*
+                                            newNode.setAttribute("color", "blue");
+                                            if(!newNode.getId().getId().equals("e_start")
+                                                    &&!newNode.getId().getId().equals("e_end"))
+                                            {
+                                               newNode.setAttribute("penwidth", "2");
+                                            }
+                                            e.setAttribute("color", "blue");
+                                            e.setAttribute("penwidth", "2");
+                                            */
+                                       }
                                     }
+                                    else if(interaction[2].equals("before"))
+                                    {
+                                       ArrayList<Edge> edges = GraphFunctions.getInEdges(graph, n);
+                                       for(Edge e:edges)
+                                       {
+                                           e.setTarget(new PortNode(newNode));
+                                       }
+                                       Edge newEdge = new Edge(new PortNode(newNode), new PortNode(n), Graph.DIRECTED);
+                                       graph.addEdge(newEdge);
+                                       /*
+                                       newNode.setAttribute("color", "blue");
+                                       if(!newNode.getId().getId().equals("e_start")
+                                               &&!newNode.getId().getId().equals("e_end"))
+                                       {
+                                          newNode.setAttribute("penwidth", "2");
+                                       }
+                                       newEdge.setAttribute("color", "blue");
+                                       newEdge.setAttribute("penwidth", "2");
+                                       */
+                                    }                         
                                 }
                             }
                         }
                         else if(interaction[0].equals("remove"))
                         {
-                            boolean onPath = false;
-                            for(String s:therapy)
+                            for(Node n:graph.getNodes(false))
                             {
-                                if(s.equals(interaction[1])
-                                   ||(s.indexOf('=')>=0 && !(s.indexOf('?')>=0)
-                                        && s.substring(0,s.indexOf('=')).equals(interaction[1])))
+                                if(n.getId().getId().equals(interaction[1]))
                                 {
-                                    onPath = true;
-                                }
-                            }
-                            if(onPath)
-                            {
-                                for(Node n:graph.getNodes(false))
-                                {
-                                    if(n.getId().getId().equals(interaction[1]))
-                                    {
-                                        n.setAttribute("style", "invis");
-                                        n.setAttribute("fixedsize", "true");
-                                        n.setAttribute("width","0");
-                                        n.setAttribute("height","0");
+                                    n.setAttribute("style", "invis");
+                                    n.setAttribute("fixedsize", "true");
+                                    n.setAttribute("width","0");
+                                    n.setAttribute("height","0");
 
-                                    }
                                 }
                             }
                         }
                         else if(interaction[0].equals("increase_dosage") || interaction[0].equals("decrease_dosage")
                                 ||interaction[0].equals("change_dosage"))
                         {
-                            boolean onPath = false;
-                            for(String s:therapy)
+                            for(Node n:graph.getNodes(false))
                             {
-                                if(s.indexOf('=')>=0 && !(s.indexOf('?')>=0)
-                                        && s.substring(0, s.indexOf('=')).equals(interaction[1]))
+                                if(n.getId().getId().equals(interaction[1]))
                                 {
-                                    onPath = true;
-                                }
-                            }
-                            if(onPath)
-                            {
-                                for(Node n:graph.getNodes(false))
-                                {
-                                    if(n.getId().getId().equals(interaction[1]))
+                                    String label = n.getAttribute("label");
+                                    if(label.indexOf('[')>=0)
                                     {
-                                        String label = n.getAttribute("label");
-                                        if(label.indexOf('[')>=0)
+                                        int dosage = Integer.parseInt(label.substring(label.lastIndexOf('[')+1, 
+                                                label.lastIndexOf(']')));
+                                        if(interaction[0].equals("increase_dosage"))
                                         {
-                                            int dosage = Integer.parseInt(label.substring(label.lastIndexOf('[')+1, 
-                                                    label.lastIndexOf(']')));
-                                            if(interaction[0].equals("increase_dosage"))
-                                            {
-                                                dosage+=Integer.parseInt(interaction[2]);
-                                            }
-                                            else if(interaction[0].equals("decrease_dosage"))
-                                            {
-                                                dosage-=Integer.parseInt(interaction[2]);
-                                            }
-                                            else if(interaction[0].equals("change_dosage"))
-                                            {
-                                                dosage=Integer.parseInt(interaction[2]);
-                                            }
-                                            n.setAttribute("label", label.substring(0, label.indexOf('[')+1)+dosage+"]");
+                                            dosage+=Integer.parseInt(interaction[2]);
                                         }
+                                        else if(interaction[0].equals("decrease_dosage"))
+                                        {
+                                            dosage-=Integer.parseInt(interaction[2]);
+                                        }
+                                        else if(interaction[0].equals("change_dosage"))
+                                        {
+                                            dosage=Integer.parseInt(interaction[2]);
+                                        }
+                                        n.setAttribute("label", label.substring(0, label.indexOf('[')+1)+dosage+"]");
                                     }
                                 }
                             }
@@ -319,10 +279,12 @@ public class Results {
             JTabbedPane mainTabbedPane, JTabbedPane graphsResultsTabbedPane)
     {
         setGraphs(executedInteractions, therapies, graphsResultsTabbedPane, selectedDiseases);
+        /*
         for(String[] conflict:foundConflicts)
         {
            ExecuteInteractions.executeInteractions(executedInteractions, foundConflicts, conflict, therapiesOfDiseases);
         }
+        */
         resultsTabbedPane.removeAll();
         int counter=1;
         for(ArrayList<ArrayList<String>> therapiesSolution:therapies)

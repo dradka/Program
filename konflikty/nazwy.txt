@@ -4,5 +4,6 @@ a_oral_cortico2:Oral corticosteroids
 warfarin:Warfarin
 BB:BB
 warfarin2:Maintenance therapy: Warfarin
-aspirin:Long-term therapy: Aspirin
+aspirin1:Long-term therapy: Aspirin
+aspirin2:Long-term therapy: Aspirin
 a_ppi2:Proton-pump inhibitors (PPI)
