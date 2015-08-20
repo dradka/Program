@@ -60,7 +60,7 @@ public class ImageGraph {
                 jLabel1.setIcon(imageIcon);
                 return true;
             }
-            else
+            else if(image.getWidth()>jLabel1.getWidth() || image.getHeight()>jLabel1.getHeight())
             {
                 if(image.getWidth()>image.getHeight())
                 {
@@ -76,6 +76,14 @@ public class ImageGraph {
                     ImageIcon imageIcon = new ImageIcon(newImage);
                     jLabel1.setIcon(imageIcon);
                 }
+                return false;
+            }
+            else
+            {
+                Image newImage = image.getScaledInstance(image.getWidth(), 
+                            image.getHeight(), java.awt.Image.SCALE_SMOOTH);
+                ImageIcon imageIcon = new ImageIcon(newImage);
+                jLabel1.setIcon(imageIcon);
                 return false;
             }
         } catch (IOException ex) {

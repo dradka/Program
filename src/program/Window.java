@@ -184,6 +184,17 @@ public class Window extends javax.swing.JFrame {
 
         disease.setText(" ");
 
+        imagesTabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                imagesTabbedPaneStateChanged(evt);
+            }
+        });
+
+        questionsTabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                questionsTabbedPaneStateChanged(evt);
+            }
+        });
         mainTabbedPane.addTab("Pytania", questionsTabbedPane);
 
         resultsTabbedPane.setMinimumSize(new java.awt.Dimension(500, 5));
@@ -195,7 +206,7 @@ public class Window extends javax.swing.JFrame {
 
         selectedPathsTabbedPane.setMinimumSize(new java.awt.Dimension(500, 5));
 
-        conflictsLabel.setText("Konflikty:");
+        conflictsLabel.setText("Konflikty i powiązane zmiany:");
 
         selectedPathsLabel.setText("Wybrane ścieżki:");
 
@@ -327,6 +338,20 @@ public class Window extends javax.swing.JFrame {
            checkBox.setSelected(false);
        }
     }//GEN-LAST:event_selectDiseasesButtonActionPerformed
+
+    private void questionsTabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_questionsTabbedPaneStateChanged
+        if(imagesTabbedPane.getTabCount()==mainClass.getSelectedDiseases().size())
+        {
+            imagesTabbedPane.setSelectedIndex(questionsTabbedPane.getSelectedIndex());
+        }
+    }//GEN-LAST:event_questionsTabbedPaneStateChanged
+
+    private void imagesTabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_imagesTabbedPaneStateChanged
+        if(questionsTabbedPane.getTabCount()==mainClass.getSelectedDiseases().size())
+        {
+            questionsTabbedPane.setSelectedIndex(imagesTabbedPane.getSelectedIndex());
+        }
+    }//GEN-LAST:event_imagesTabbedPaneStateChanged
 
     /**
      * @param args the command line arguments

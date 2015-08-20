@@ -380,6 +380,20 @@ public class Results {
                 {
                     for(Node n:g.getNodes(false))
                     {
+                        if(text.indexOf('?')>=0 
+                                        && n.getId().getId().equals(text.substring(0, text.indexOf('?'))))
+                        {
+                            if(notConflictElem)
+                            {
+                                text="not("+n.getAttribute("label")+": "
+                                    +text.substring(text.indexOf('?')+1)+") ("+selectedDiseases.get(graphs.indexOf(g))+")";
+                            }
+                            else
+                            {
+                                text =  n.getAttribute("label")+": "
+                                    +text.substring(text.indexOf('?')+1)+" ("+selectedDiseases.get(graphs.indexOf(g))+")";
+                            }
+                        }
                         if(n.getId().getId().equals(text))
                         {
                             if(n.getAttribute("label")!=null && !n.getAttribute("label").equals(""))
@@ -419,11 +433,18 @@ public class Results {
                         {
                             for(Node n:g.getNodes(false))
                             {
-                                if(n.getId().getId().equals(interaction[i]))
+                                if(interaction[i].indexOf('?')>=0 
+                                        && n.getId().getId().equals(interaction[i].substring(0, interaction[i].indexOf('?'))))
+                                {
+                                    text =  n.getAttribute("label")+": "
+                                            +interaction[i].substring(interaction[i].indexOf('?')+1)
+                                            +" ("+selectedDiseases.get(graphs.indexOf(g))+")";
+                                }
+                                else if(n.getId().getId().equals(interaction[i]))
                                 {
                                     if(n.getAttribute("label")!=null && !n.getAttribute("label").equals(""))
                                     {
-                                        text=n.getAttribute("label")+" ("+selectedDiseases.get(graphs.indexOf(g))+")";;
+                                        text=n.getAttribute("label")+" ("+selectedDiseases.get(graphs.indexOf(g))+")";
                                     }
                                 }
                             }

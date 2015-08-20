@@ -18,6 +18,7 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -613,35 +614,61 @@ public class ChocoClass {
         }
         
     }
+    private void findSolutions(ArrayList<String[]> conflictsList, ArrayList<JPanel> panels, 
+            ArrayList<ArrayList<ArrayList<String>>> therapiesOfDiseases,
+            ArrayList<String> diseases,  ArrayList<Integer> avoidedConflicts,
+            ArrayList<String[]> foundConflicts,
+            ArrayList<ArrayList<String[]>> executedInteractions, ArrayList<ArrayList<String[]>> interactionsList,
+            ArrayList<Graph> graphs)
+    {
+        boolean stop = false;
+        for(int i=0;i<conflictsList.size()&&!stop;i++)
+        {
+            String[] conflict = conflictsList.get(i);
+            boolean omit = false;
+            for(String[] foundConflict:foundConflicts)
+            {
+                if(Arrays.equals(conflict, foundConflict))
+                {
+                    omit = true;
+                }
+            }
+            if(!omit)
+            {
+                Solver s = new Solver();
+                setAdditionalVariables(panels, s);
+                setVariables(diseases, therapiesOfDiseases, s, graphs);
+                for(Integer k:avoidedConflicts)
+                {
+                    setConflictConstraint(conflictsList.get(k), s);
+                }
+                setConflictConstraint(conflict, s);
+                addConstraintsTrue(s);
+                s.findSolution();
+                //System.out.println(s.solutionToString());
+                if(s.isFeasible()==ESat.FALSE)
+                {
+                    foundConflicts.add(conflict);
+                    executedInteractions.add(interactionsList.get(conflictsList.indexOf(conflict)));
+                    ExecuteInteractions.executeInteractions(interactionsList, conflictsList, conflict, therapiesOfDiseases);
+                    findSolutions(conflictsList, panels, therapiesOfDiseases, diseases,  avoidedConflicts, 
+                            foundConflicts, executedInteractions, interactionsList, graphs);
+                    stop = true;
+                }
+                else
+                {
+                    avoidedConflicts.add(conflictsList.indexOf(conflict));
+                }
+            }
+        }   
+    }
     private void solveNextPart(ArrayList<String[]> conflictsList, ArrayList<ArrayList<ArrayList<String>>> therapiesOfDiseases,
             ArrayList<String> diseases,  ArrayList<Integer> avoidedConflicts, ArrayList<String[]> foundConflicts,
             ArrayList<ArrayList<String[]>> executedInteractions, ArrayList<ArrayList<String[]>> interactionsList,
             Window window, ArrayList<JPanel> panels, ArrayList<Graph> graphs)
     {
-        for(String[] conflict:conflictsList)
-        {
-            Solver s = new Solver();
-            setAdditionalVariables(panels, s);
-            setVariables(diseases, therapiesOfDiseases, s, graphs);
-            for(Integer k:avoidedConflicts)
-            {
-                setConflictConstraint(conflictsList.get(k), s);
-            }
-            setConflictConstraint(conflict, s);
-            addConstraintsTrue(s);
-            s.findSolution();
-            //System.out.println(s.solutionToString());
-            if(s.isFeasible()==ESat.FALSE)
-            {
-                foundConflicts.add(conflict);
-                executedInteractions.add(interactionsList.get(conflictsList.indexOf(conflict)));
-                ExecuteInteractions.executeInteractions(interactionsList, conflictsList, conflict, therapiesOfDiseases);
-            }
-            else
-            {
-                avoidedConflicts.add(conflictsList.indexOf(conflict));
-            }
-        }
+        findSolutions(conflictsList, panels, therapiesOfDiseases, diseases,  avoidedConflicts, 
+                        foundConflicts, executedInteractions, interactionsList, graphs);
         Solver s = new Solver();
         setAdditionalVariables(panels, s);
         setVariables(diseases, therapiesOfDiseases, s, graphs);

@@ -118,6 +118,9 @@
       </Properties>
     </Component>
     <Container class="javax.swing.JTabbedPane" name="imagesTabbedPane">
+      <Events>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="imagesTabbedPaneStateChanged"/>
+      </Events>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
     </Container>
@@ -126,6 +129,9 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
         <Container class="javax.swing.JTabbedPane" name="questionsTabbedPane">
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="questionsTabbedPaneStateChanged"/>
+          </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Pytania">
@@ -222,7 +228,7 @@
             </Container>
             <Component class="javax.swing.JLabel" name="conflictsLabel">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Konflikty:"/>
+                <Property name="text" type="java.lang.String" value="Konflikty i powi&#x105;zane zmiany:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="selectedPathsLabel">
