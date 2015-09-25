@@ -217,23 +217,23 @@ public class RadioButtonList {
                     mainClass.getParallelNodesHistory().get(idOfDisease).get(idOfQuestion));
             mainClass.getParallelPaths().set(idOfDisease, 
                     mainClass.getParallelPathsHistory().get(idOfDisease).get(idOfQuestion));
-            Node n = null;
+            Node next = null;
             for(Node node:mainClass.getGraphs().get(idOfDisease).getNodes(false))
             {
                 if(node.getId().getId().equals(question))
                 {
-                    n = node;
+                    next = node;
                 }
             }
-            ArrayList<Edge> list = GraphFunctions.getOutEdges(mainClass.getGraphs().get(idOfDisease), n);
+            ArrayList<Edge> list = GraphFunctions.getOutEdges(mainClass.getGraphs().get(idOfDisease), next);
             for(Edge e:list)
             {
                 if(e.getAttribute("label").equals(answer))
                 {
-                    n = e.getTarget().getNode();
+                    next = e.getTarget().getNode();
                 }
             }
-            GoForward.goForward(n, idOfDisease, therapyList, mainClass.getParallelNodes(), 
+            GoForward.goForward(next, idOfDisease, therapyList, mainClass.getParallelNodes(), 
                     mainClass.getParallelPaths(), mainClass.getGraphs(), mainClass.getLastNodes(), 
                 mainClass.getParallelNodesHistory(), mainClass.getParallelPathsHistory());
             

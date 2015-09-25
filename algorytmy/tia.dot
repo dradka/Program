@@ -6,7 +6,7 @@ node [shape=box, style=filled, fillcolor=green, fontname=Calibri, fontsize=11];
 edge [fontname="Calibri Italic", fontsize=10];
 
 // Context
-c_tia [label="Transient \n ischemic attack [TIA]", shape=oval, style=filled, fillcolor=red];
+c_tia [label="Patient diagnosed \n with transient ischemic attack", shape=oval, style=filled, fillcolor=red];
 
 // Decisions
 d_hypoglycemia [shape=diamond, fillcolor=yellow, label="Hypoglycemia?"];

@@ -4,7 +4,7 @@ digraph AE {
 	edge [fontname="Calibri Italic", fontsize=10];
 
 	// Context
-	c_ae [label="Patient diagnosed \n with asthma exacerbation [AE]", shape=oval, style=filled, fillcolor=red];
+	c_ae [label="Patient diagnosed \n with asthma exacerbation", shape=oval, style=filled, fillcolor=red];
 	
 	// Event nodes
 	e_start [shape=circle, label="", width=0.3, penwidth=2, fillcolor="gray"];
