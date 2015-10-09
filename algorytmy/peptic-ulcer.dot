@@ -4,7 +4,7 @@ digraph PE {
 	edge [fontname="Calibri Italic", fontsize=10];
 
 	// Context
-	c_pe [label="Patient diagnosed \n with peptic ulcer", shape=oval, style=filled, fillcolor=red];
+	c_pe [label="Peptic ulcer", shape=oval, style=filled, fillcolor=red];
 	
 	// Event nodes
 	e_start [shape=circle, label="", width=0.3, penwidth=2, fillcolor="gray"];

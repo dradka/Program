@@ -9,7 +9,7 @@ node [shape=box, style=filled, fillcolor=green, fontname=Calibri, fontsize=11];
 edge [fontname="Calibri Italic", fontsize=10];
 
 // Context
-c_afib [label="Patient diagnosed \n with AFib", shape=oval, style=filled, fillcolor=red];
+c_afib [label="Atrial fibrillation", shape=oval, style=filled, fillcolor=red];
 
 // Actions
 a_cha2ds2 [label="Perform CHA2DS2-VASc test"];

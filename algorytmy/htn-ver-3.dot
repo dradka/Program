@@ -8,7 +8,7 @@ node [shape=box, style=filled, fillcolor=green, fontname=Calibri, fontsize=11];
 edge [fontname="Calibri Italic", fontsize=10];
 
 // Context
-c_htn [label="Patient diagnosed \n with HTN", shape=oval, style=filled, fillcolor=red];
+c_htn [label="Hypertension", shape=oval, style=filled, fillcolor=red];
 
 // Actions
 a_lifestyle_management [label="Lifestyle management"];

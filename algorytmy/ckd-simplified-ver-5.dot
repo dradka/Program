@@ -8,7 +8,7 @@ node [shape=box, style=filled, fillcolor=green, fontname=Calibri, fontsize=11];
 edge [fontname="Calibri Italic", fontsize=10];
 
 // Context
-c_ckd [label="Patient diagnosed \n with CKD", shape=oval, style=filled, fillcolor=red];
+c_ckd [label="Chronic kidney disease", shape=oval, style=filled, fillcolor=red];
 
 // Actions
 a_phosphate_binders [label="Phosphate binders:\n calcium carbonate"];

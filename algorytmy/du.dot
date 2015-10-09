@@ -6,7 +6,7 @@ node [shape=box, style=filled, fillcolor=green, fontname=Calibri, fontsize=11];
 edge [fontname="Calibri Italic", fontsize=10];
 
 // Context
-c_du [label="Patient diagnosed \n with duodenal ulcer", shape=oval, style=filled, fillcolor=red];
+c_du [label="Duodenal ulcer", shape=oval, style=filled, fillcolor=red];
 
 // Decisions
 d_hpylori [shape=diamond, fillcolor=yellow, label="H.pylori?"];
