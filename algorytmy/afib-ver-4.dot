@@ -25,7 +25,7 @@ a_ccb [label="CCB"];
 a_acei [label="ACE inhibitor"];
 
 // Decisions
-d_paroxys_afib [shape=diamond, fillcolor=yellow, label="AFib type?"];
+d_afib [shape=diamond, fillcolor=yellow, label="AFib type?"];
 
 // Parallel gateways
 p1 [shape=circle, label="", width=0.2, fillcolor=black];
@@ -36,9 +36,9 @@ e_start [shape=circle, label="", width=0.3, penwidth=2, fillcolor="gray"];
 e_end [shape=circle, label="", width=0.3, penwidth=6, fillcolor="gray"];
 
 // Arcs
-e_start -> c_afib -> a_cha2ds2 ->  d_paroxys_afib;
-d_paroxys_afib -> a_oa_w [label="symptomatic"];
-d_paroxys_afib -> a_stt_bb [label="paroxysmal"];
+e_start -> c_afib -> a_cha2ds2 ->  d_afib;
+d_afib -> a_oa_w [label="symptomatic"];
+d_afib -> a_stt_bb [label="paroxysmal"];
 a_oa_w -> a_rct_bb;
 a_rct_bb -> a_mt_asa;
 a_mt_asa -> p1;

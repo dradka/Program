@@ -86,6 +86,7 @@ public class Results {
                                     Id id = new Id();
                                     id.setId(interaction[3]);
                                     n.setId(id);
+                                    n.setAttribute("fontcolor", "blue");
                                     /*
                                     n.setAttribute("color", "blue");
                                     if(!n.getId().getId().equals("e_start")&&!n.getId().getId().equals("e_end"))
@@ -123,6 +124,7 @@ public class Results {
                                 Id id = new Id();
                                 id.setId(interaction[1]);
                                 newNode.setId(id);
+                                newNode.setAttribute("fontcolor", "blue");
                                 String label = getNodeLabel(interaction[1]);
                                 if(label!=null)
                                 {
@@ -215,8 +217,32 @@ public class Results {
                                     n.setAttribute("fixedsize", "true");
                                     n.setAttribute("width","0");
                                     n.setAttribute("height","0");
-
+                                    
+                                    boolean onPath = false;
+                                    for(String s:therapy)
+                                    {
+                                        if(s.indexOf('#')>=0 && s.substring(1).equals(interaction[1]))
+                                        {
+                                            String s2 = s.substring(1);
+                                            if(s2.equals(interaction[1])
+                                                ||(s2.indexOf('=')>=0 && !(s2.indexOf('?')>=0)
+                                                && s2.substring(0,s2.indexOf('=')).equals(interaction[1])))
+                                            {
+                                                onPath = true;
+                                            }
+                                        }                                
+                                    }
+                                    if(onPath)
+                                    {
+                                        ArrayList<Edge> list = GraphFunctions.getOutEdges(graph, n);
+                                        for(Edge e:list)
+                                        {
+                                            e.setAttribute("color", "blue");
+                                            e.setAttribute("penwidth", "2");
+                                        }
+                                    }
                                 }
+                                
                             }
                         }
                         else if(interaction[0].equals("increase_dosage") || interaction[0].equals("decrease_dosage")

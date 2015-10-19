@@ -31,10 +31,10 @@ p3 [shape=circle, label="", width=0.2, fillcolor=black];
 p4 [shape=circle, label="", width=0.2, fillcolor=black];
 
 // Decisions
-d_age_under_55 [shape=diamond, fillcolor=yellow, label="Age?"];
-d_bp_controlled_1 [shape=diamond, fillcolor=yellow, label="BP Test #1?"];
-d_bp_controlled_2 [shape=diamond, fillcolor=yellow, label="BP Test #2?"];
-d_bp_controlled_3 [shape=diamond, fillcolor=yellow, label="BP Test #3?"];
+d_age [shape=diamond, fillcolor=yellow, label="Age?"];
+d_bp_1 [shape=diamond, fillcolor=yellow, label="BP Test #1?"];
+d_bp_2 [shape=diamond, fillcolor=yellow, label="BP Test #2?"];
+d_bp_3 [shape=diamond, fillcolor=yellow, label="BP Test #3?"];
 
 // Event nodes
 e_start [shape=circle, label="", width=0.3, penwidth=2, fillcolor="gray"];
@@ -43,31 +43,31 @@ e_end [shape=circle, label="", width=0.3, penwidth=6, fillcolor="gray"];
 
 // Arcs
 e_start -> c_htn;
-c_htn -> d_age_under_55;
+c_htn -> d_age;
 
-d_age_under_55 -> a_step1_acei [label="< 55"];
-d_age_under_55 -> a_step1_ccb [label=">= 55"];
+d_age -> a_step1_acei [label="< 55"];
+d_age -> a_step1_ccb [label=">= 55"];
 
-a_step1_acei -> d_bp_controlled_1;
-a_step1_ccb -> d_bp_controlled_1;
-d_bp_controlled_1 -> a_lifestyle_management [label="controlled"];
-d_bp_controlled_1 -> p1 [label="uncontrolled"];
+a_step1_acei -> d_bp_1;
+a_step1_ccb -> d_bp_1;
+d_bp_1 -> a_lifestyle_management [label="controlled"];
+d_bp_1 -> p1 [label="uncontrolled"];
 p1 -> a_step2_acei;
 p1 -> a_step2_ccb
 a_step2_acei -> p2;
 a_step2_ccb -> p2;
-p2 -> d_bp_controlled_2;
-d_bp_controlled_2 -> a_lifestyle_management [label="controlled"];
-d_bp_controlled_2 -> p3 [label="uncontrolled"];
+p2 -> d_bp_2;
+d_bp_2 -> a_lifestyle_management [label="controlled"];
+d_bp_2 -> p3 [label="uncontrolled"];
 p3 -> a_step3_acei;
 p3 -> a_step3_ccb;
 p3 -> a_step3_diuretric;
 a_step3_acei -> p4;
 a_step3_ccb -> p4;
 a_step3_diuretric -> p4;
-p4 -> d_bp_controlled_3;
-d_bp_controlled_3 -> a_lifestyle_management [label="controlled"];
-d_bp_controlled_3 -> a_specialist_consult [label="uncontrolled"];
+p4 -> d_bp_3;
+d_bp_3 -> a_lifestyle_management [label="controlled"];
+d_bp_3 -> a_specialist_consult [label="uncontrolled"];
 a_lifestyle_management -> e_end;
 a_specialist_consult -> e_end;
 }

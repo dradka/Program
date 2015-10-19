@@ -1,9 +1,9 @@
-ppi:PPI
+a_ppi:PPI
 a_inh_cortico2:Inhaled corticosteroids
 a_oral_cortico2:Oral corticosteroids
-warfarin:Warfarin
-BB:BB
-warfarin2:Maintenance therapy: Warfarin
-aspirin1:Long-term therapy: Aspirin
-aspirin2:Long-term therapy: Aspirin
-a_ppi2:Proton-pump inhibitors (PPI)
+a_warfarin:Warfarin
+a_bb:BB
+a_warfarin_2:Maintenance therapy: Warfarin
+a_aspirin_1:Long-term therapy: Aspirin
+a_aspirin_2:Long-term therapy: Aspirin
+a_ppi2:Proton-pump inhibitors

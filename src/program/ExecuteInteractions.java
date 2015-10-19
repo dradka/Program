@@ -90,7 +90,8 @@ public class ExecuteInteractions {
                         }
                         if(medicineVar!=null)
                         {
-                            therapy.remove(medicineVar);
+                            //therapy.remove(medicineVar);
+                            therapy.set(therapy.indexOf(medicineVar), "#"+medicineVar);
                         }
                     }
                 } 

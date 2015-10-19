@@ -1,2 +1,2 @@
 c_du a_aspirin not(a_ppi) not(a_dipyridamole):replace a_aspirin with cl
-c_du a_aspirin not(a_ppi) a_dipyridamole:add a_ppi2 after d_ze_syndrome?positive,decrease_dosage a_aspirin 50
+c_du a_aspirin not(a_ppi) a_dipyridamole:add a_ppi_2 after d_ze_syndrome?positive,decrease_dosage a_aspirin 50
