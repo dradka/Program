@@ -324,46 +324,49 @@ public class Results {
                 String text = "";
                 for(String s:therapy)
                 {
-                    boolean found = false;
-                    for(Node n:graphs.get(therapiesSolution.indexOf(therapy)).getNodes(false))
+                    if(!s.startsWith("#"))
                     {
-                        if(n.getId().getId().equals(s)||
-                                (s.lastIndexOf('?')>=0&&n.getId().getId().equals(s.substring(0,s.lastIndexOf('?')))))
+                        boolean found = false;
+                        for(Node n:graphs.get(therapiesSolution.indexOf(therapy)).getNodes(false))
                         {
-                            found = true;
-                            if(n.getAttribute("label")!=null && !n.getAttribute("label").equals(""))
+                            if(n.getId().getId().equals(s)||
+                                    (s.lastIndexOf('?')>=0&&n.getId().getId().equals(s.substring(0,s.lastIndexOf('?')))))
                             {
-                                text=text+n.getAttribute("label");
-                                if(s.lastIndexOf('?')>=0)
+                                found = true;
+                                if(n.getAttribute("label")!=null && !n.getAttribute("label").equals(""))
                                 {
-                                    text=text+": "+s.substring(s.lastIndexOf('?')+1);
+                                    text=text+n.getAttribute("label");
+                                    if(s.lastIndexOf('?')>=0)
+                                    {
+                                        text=text+": "+s.substring(s.lastIndexOf('?')+1);
+                                    }
+                                    text+="\n";
                                 }
-                                text+="\n";
                             }
-                        }
-                        else if(s.lastIndexOf('=')>=0 && !(s.indexOf('?')>=0)
-                                &&n.getId().getId().equals(s.substring(0,s.lastIndexOf('='))))
-                        {
-                            found = true;
-                            if(n.getAttribute("label")!=null && !n.getAttribute("label").equals(""))
+                            else if(s.lastIndexOf('=')>=0 && !(s.indexOf('?')>=0)
+                                    &&n.getId().getId().equals(s.substring(0,s.lastIndexOf('='))))
                             {
-                                String label = n.getAttribute("label");
-                                text=text+label.substring(0, label.lastIndexOf('[')+1)
-                                        +s.substring(s.indexOf('=')+1)+"]";
+                                found = true;
+                                if(n.getAttribute("label")!=null && !n.getAttribute("label").equals(""))
+                                {
+                                    String label = n.getAttribute("label");
+                                    text=text+label.substring(0, label.lastIndexOf('[')+1)
+                                            +s.substring(s.indexOf('=')+1)+"]";
+                                }
                             }
                         }
-                    }
-                    if(!found)
-                    {
-                       String label = getNodeLabel(s);
-                       if(label!=null)
-                       {
-                           text=text+label+"\n";
-                       }
-                       else
-                       {
-                           text=text+s+"\n";
-                       }
+                        if(!found)
+                        {
+                           String label = getNodeLabel(s);
+                           if(label!=null)
+                           {
+                               text=text+label+"\n";
+                           }
+                           else
+                           {
+                               text=text+s+"\n";
+                           }
+                        }
                     }
                 }
                 results3TextArea.setText(text);
@@ -375,7 +378,10 @@ public class Results {
                 String text2 = "";
                 for(String s:therapy)
                 {
-                    text2=text2+s+"\n";
+                    if(!s.startsWith("#"))
+                    {
+                        text2=text2+s+"\n";
+                    }
                 }
                 results4TextArea.setText(text2);
                 JScrollPane scrollResults4 = new JScrollPane(results4TextArea);
@@ -509,6 +515,7 @@ public class Results {
         selectedPathsLabel.setVisible(true);
         resultsLabel.setVisible(true);
         mainTabbedPane.setSelectedIndex(2);
+        /*
         for(ArrayList<ArrayList<String>> therapiesOfDisease:therapiesOfDiseases)
         {
             for(ArrayList<String> therapy:therapiesOfDisease)
@@ -527,5 +534,6 @@ public class Results {
                 }
             }
         }
+        */
     } 
 }
