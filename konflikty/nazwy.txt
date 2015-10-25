@@ -6,4 +6,4 @@ a_bb:BB
 a_warfarin_2:Maintenance therapy: Warfarin
 a_aspirin_1:Long-term therapy: Aspirin
 a_aspirin_2:Long-term therapy: Aspirin
-a_ppi2:Proton-pump inhibitors
+a_ppi_2:Proton-pump inhibitors

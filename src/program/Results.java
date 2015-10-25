@@ -270,6 +270,7 @@ public class Results {
                                             dosage=Integer.parseInt(interaction[2]);
                                         }
                                         n.setAttribute("label", label.substring(0, label.indexOf('[')+1)+dosage+"]");
+                                        n.setAttribute("fontcolor", "blue");
                                     }
                                 }
                             }
